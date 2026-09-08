@@ -2,3 +2,4 @@ mss
 pywin32
 opencv-python
 numpy
+pyautogui

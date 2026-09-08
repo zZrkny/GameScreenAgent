@@ -61,4 +61,4 @@ def capture_window(title_keyword, output_path="game_window.png"):
             output=output_path
         )
 
-    return output_path, title
+    return output_path, title, region

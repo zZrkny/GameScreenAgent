@@ -1,33 +1,89 @@
+import time
+
 from src.capture import capture_window
-from src.vision import find_template, draw_match
+from src.state_detector import detect_state
+from src.agent import decide
+from src.actions import execute_action
 
 
-result = capture_window("炉石")
+GAME_WINDOW_TITLE = "炉石"
 
-if result is None:
-    print("Game window not found.")
+POLL_INTERVAL = 1.0
+STABLE_FRAMES = 2
 
-else:
-    screen_path, title = result
 
-    print(f"Window found: {title}")
-    print(f"Screenshot saved to: {screen_path}")
+last_candidate = None
+candidate_count = 0
 
-    found, score, top_left, bottom_right = find_template(
-        screen_path,
-        "assets/templates/target.png"
-    )
+stable_state = None
+action_done = False
 
-    print()
-    print("Template: target.png")
-    print(f"Found: {found}")
-    print(f"Confidence: {score:.3f}")
 
-    if found:
-        debug_path = draw_match(
-            screen_path,
-            top_left,
-            bottom_right
+print("GameScreenAgent v0.1 started.")
+print("Press Ctrl+C to stop.")
+
+
+try:
+
+    while True:
+
+        result = capture_window(
+            GAME_WINDOW_TITLE
         )
 
-        print(f"Debug image saved to: {debug_path}")
+        if result is None:
+            print("Game window not found.")
+            time.sleep(POLL_INTERVAL)
+            continue
+
+        screen_path, title, region = result
+
+        state, score = detect_state(
+            screen_path
+        )
+
+        # 防止识别偶尔闪一下
+        if state == last_candidate:
+            candidate_count += 1
+        else:
+            last_candidate = state
+            candidate_count = 1
+
+        if candidate_count >= STABLE_FRAMES:
+
+            if state != stable_state:
+
+                stable_state = state
+                action_done = False
+
+                print()
+                print(
+                    f"State: {state.value} "
+                    f"({score:.3f})"
+                )
+
+            if not action_done:
+
+                action = decide(state)
+
+                print(
+                    f"Decision: {action.value}"
+                )
+
+                success = execute_action(
+                    action,
+                    screen_path,
+                    region,
+                    GAME_WINDOW_TITLE
+                )
+
+                if success:
+                    action_done = True
+
+        time.sleep(POLL_INTERVAL)
+
+
+except KeyboardInterrupt:
+
+    print()
+    print("GameScreenAgent stopped.")

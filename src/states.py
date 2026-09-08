@@ -1,0 +1,10 @@
+from enum import Enum
+
+
+class GameState(Enum):
+    UNKNOWN = "UNKNOWN"
+    BATTLEGROUNDS_MENU = "BATTLEGROUNDS_MENU"
+    HERO_SELECT = "HERO_SELECT"
+    TRINKET_SELECT = "TRINKET_SELECT"
+    SHOP_PHASE = "SHOP_PHASE"
+    RESULT = "RESULT"
