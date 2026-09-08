@@ -3,6 +3,11 @@ from src.vision import find_template
 
 
 STATE_TEMPLATES = {
+    GameState.WEEKLY_QUEST_POPUP: (
+        "assets/templates/states/weekly_quest.png",
+        0.85
+    ),
+    
     GameState.TRINKET_SELECT: (
         "assets/templates/states/trinket_select.png",
         0.85
@@ -31,6 +36,7 @@ STATE_TEMPLATES = {
 
 
 STATE_PRIORITY = [
+    GameState.WEEKLY_QUEST_POPUP,
     GameState.TRINKET_SELECT,
     GameState.HERO_SELECT,
     GameState.RESULT,

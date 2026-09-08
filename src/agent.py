@@ -9,6 +9,7 @@ class AgentAction(Enum):
     SELECT_TRINKET = "SELECT_TRINKET"
     BUY_AND_PLAY_LEFTMOST = "BUY_AND_PLAY_LEFTMOST"
     RETURN_TO_MENU = "RETURN_TO_MENU"
+    DISMISS_WEEKLY_QUEST = "DISMISS_WEEKLY_QUEST"
 
 
 def decide(state):
@@ -26,5 +27,8 @@ def decide(state):
 
     if state == GameState.RESULT:
         return AgentAction.RETURN_TO_MENU
+    
+    if state == GameState.WEEKLY_QUEST_POPUP:
+        return AgentAction.DISMISS_WEEKLY_QUEST
 
     return AgentAction.WAIT

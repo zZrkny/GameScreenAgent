@@ -618,6 +618,18 @@ def execute_action(
 
         return True
 
+    if action == AgentAction.DISMISS_WEEKLY_QUEST:
+        x, y = normalized_to_screen(
+            region,
+            (0.50, 0.50)
+        )
+
+        pyautogui.click(x, y)
+
+        time.sleep(0.8)
+
+        return True
+
     # WAIT
     return True
 
